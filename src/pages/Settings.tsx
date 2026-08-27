@@ -107,7 +107,6 @@ export default function Settings() {
                           ? 'light_mode'
                           : 'settings_brightness'}
                     </Icon>
-
                     {theme}
                   </button>
                 ))}
