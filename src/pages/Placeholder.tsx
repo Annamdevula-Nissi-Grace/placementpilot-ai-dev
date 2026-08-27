@@ -1,0 +1,1 @@
+export default function Placeholder(){return <div className="empty-state"><span className="material-symbols-outlined">construction</span><h1>Coming Soon</h1><p>This area is reserved for a future CareerAI module.</p></div>}
