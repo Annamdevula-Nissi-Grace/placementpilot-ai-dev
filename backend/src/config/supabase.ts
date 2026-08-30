@@ -1,17 +1,49 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+function getRequiredEnv(name: string): string {
+  const value = process.env[name];
 
-if (!supabaseUrl) {
-  throw new Error('SUPABASE_URL is missing from environment variables.');
+  if (!value) {
+    throw new Error(
+      `${name} is missing from environment variables.`
+    );
+  }
+
+  return value;
 }
 
-if (!supabaseAnonKey) {
-  throw new Error('SUPABASE_ANON_KEY is missing from environment variables.');
-}
+const supabaseUrl = getRequiredEnv('SUPABASE_URL');
+const supabaseKey = getRequiredEnv('SUPABASE_ANON_KEY');
 
 export const supabase = createClient(
   supabaseUrl,
-  supabaseAnonKey
+  supabaseKey,
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+      detectSessionInUrl: false,
+    },
+  }
 );
+
+export function createAuthenticatedSupabaseClient(
+  accessToken: string
+) {
+  return createClient(
+    supabaseUrl,
+    supabaseKey,
+    {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+        detectSessionInUrl: false,
+      },
+      global: {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    }
+  );
+}
